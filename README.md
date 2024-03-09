@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next JS Internationalization
 
-## Getting Started
+- Folder Structure setup like this **``**
 
-First, run the development server:
+```javascript
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+| src
+|    ├── [locale]
+|    |        ├── about-us
+|    |                └── page.jsx
+|    |        ├── about-us
+|    |                └── page.jsx
+|    ├── global.css
+|    ├── page.jsx
+|    └── layout.js
+|
+|
+| i18n.js
+| i18nConfig.js
+| .env
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Install Following packages
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```javascript
+npm i i18next react-i18next i18next-resources-to-backend next-i18n-router
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Create file **`i18nConfig.js`** globally
 
-## Learn More
+```javascript
+const i18nConfig = {
+  locales: ["en", "ur"],
+  defaultLocale: "en",
+  // prefixDefault: true,
+};
 
-To learn more about Next.js, take a look at the following resources:
+module.exports = i18nConfig;
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Create file **`middleware.js`**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```javascript
+import { i18nRouter } from "next-i18n-router";
+import i18nConfig from "./i18nConfig";
 
-## Deploy on Vercel
+export function middleware(request) {
+  return i18nRouter(request, i18nConfig);
+}
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+export const config = {
+  matcher: "/((?!api|static|.*\\..*|_next).*)",
+};
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Create file **`i18n.js`**
+
+```javascript
+import { createInstance } from "i18next";
+import { initReactI18next } from "react-i18next/initReactI18next";
+import resourcesToBackend from "i18next-resources-to-backend";
+import i18nConfig from "../i18nConfig";
+
+export default async function initTranslations(locale, namespaces, i18nInstance, resources) {
+  i18nInstance = i18nInstance || createInstance();
+
+  i18nInstance.use(initReactI18next);
+
+  if (!resources) {
+    i18nInstance.use(
+      resourcesToBackend((language, namespace) => import(`@/locales/${language}/${namespace}.json`))
+    );
+  }
+
+  await i18nInstance.init({
+    lng: locale,
+    resources,
+    fallbackLng: i18nConfig.defaultLocale,
+    supportedLngs: i18nConfig.locales,
+    defaultNS: namespaces[0],
+    fallbackNS: namespaces[0],
+    ns: namespaces,
+    preload: resources ? [] : i18nConfig.locales,
+  });
+
+  return {
+    i18n: i18nInstance,
+    resources: i18nInstance.services.resourceStore.data,
+    t: i18nInstance.t,
+  };
+}
+```
+
+| If you are using **`app`** inside **`src`**. Search ur should be like this.
+
+```javascript
+http://localhost:3000/en
+http://localhost:3000/en/about-us
+http://localhost:3000/en/faq
+```
+
+| If you are using **`app`** outside **`src`**. Search ur should be like this.
+
+```javascript
+http://localhost:3000
+http://localhost:3000/about-us
+http://localhost:3000/faq
+```
