@@ -1,0 +1,27 @@
+{
+  "name": "clientserverapis",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "i18next": "^23.10.1",
+    "i18next-resources-to-backend": "^1.2.0",
+    "next": "14.1.3",
+    "next-i18n-router": "^5.3.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-i18next": "^14.1.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}
