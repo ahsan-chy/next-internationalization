@@ -5,12 +5,14 @@
 ```javascript
 
 | src
+|   app
 |    ├── [locale]
 |    |        ├── about-us
-|    |                └── page.jsx
-|    |        ├── about-us
-|    |                └── page.jsx
-|    ├── global.css
+|    |        |        └── page.jsx
+|    |        ├── faq
+|    |        |        └── page.jsx
+|    |        ├── page.jsx
+|    |        └── layout.js
 |    ├── page.jsx
 |    └── layout.js
 |
@@ -54,6 +56,55 @@ export const config = {
 };
 ```
 
+| If you are using **`app`** inside **`src`**. Search ur should be like this.
+
+```javascript
+http://localhost:3000/en
+http://localhost:3000/en/about-us
+http://localhost:3000/en/faq
+```
+
+| If you are using **`app`** outside **`src`**. Search ur should be like this.
+
+```javascript
+http://localhost:3000
+http://localhost:3000/about-us
+http://localhost:3000/faq
+```
+
+- Create AC on **[i18nexus](https://app.i18nexus.com/)**
+
+Setup language here and use api key inside your .env file
+
+**.env**
+
+```javascript
+I18NEXUS_API_KEY = "96_nSHQv-sjklfsalkj";
+```
+
+Run Following commonds like this.
+
+```javascript
+npm install i18nexus-cli -g
+
+npm i i18nexus-cli --save-dev
+```
+
+```javascript
+i18nexus pull
+```
+
+- Setup the **package.json**
+
+```javascript
+"scripts": {
+  "dev": "i18nexus pull && next dev",
+  "build": "i18nexus pull && next build",
+  "start": "i18nexus pull && next start",
+  "lint": "next lint"
+},
+```
+
 - Create file **`i18n.js`**
 
 ```javascript
@@ -90,20 +141,4 @@ export default async function initTranslations(locale, namespaces, i18nInstance,
     t: i18nInstance.t,
   };
 }
-```
-
-| If you are using **`app`** inside **`src`**. Search ur should be like this.
-
-```javascript
-http://localhost:3000/en
-http://localhost:3000/en/about-us
-http://localhost:3000/en/faq
-```
-
-| If you are using **`app`** outside **`src`**. Search ur should be like this.
-
-```javascript
-http://localhost:3000
-http://localhost:3000/about-us
-http://localhost:3000/faq
 ```
