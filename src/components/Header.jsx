@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../public/assets/images/404.png";
+import LanguageChanger from "./LanguageChanger";
 
 const Header = () => {
   return (
@@ -32,6 +33,7 @@ const Header = () => {
               href="/en/faq">
               FAQ
             </Link>
+            <LanguageChanger />
           </nav>
         </div>
       </div>

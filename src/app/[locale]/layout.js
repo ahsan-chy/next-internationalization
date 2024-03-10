@@ -12,11 +12,11 @@ export default function RootLayout({ children, params: { locale } }) {
   const { t, resources } = initTranslations(locale, ["home"]);
 
   return (
-    <html lang="en">
+    <html>
       <body>
-      <TranslationsProvider resources={resources} locale={locale} namespaces={["home"]}>
-        <Header />
-        {children}
+        <TranslationsProvider resources={resources} locale={locale} namespaces={["home"]}>
+          <Header />
+          {children}
         </TranslationsProvider>
       </body>
     </html>
